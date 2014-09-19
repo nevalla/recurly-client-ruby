@@ -40,20 +40,38 @@ module Recurly
   end
 
   class << self
+
+    def thread_store
+      unless Thread.current[:recurly]
+        Thread.current[:recurly] = {}
+      end
+      Thread.current[:recurly]
+    end
+
     # @return [String] A subdomain.
     def subdomain
-      @subdomain || 'api'
+      thread_store[:subdomain] || 'api'
     end
-    attr_writer :subdomain
+
+    # Sets subdomain.
+    # @param [String] sudomain
+    def subdomain=(subdomain)
+      thread_store[:subdomain] = subdomain
+    end
 
     # @return [String] An API key.
     # @raise [ConfigurationError] If not configured.
     def api_key
-      defined? @api_key and @api_key or raise(
+      defined? thread_store[:api_key] and thread_store[:api_key] or raise(
         ConfigurationError, "Recurly.api_key not configured"
       )
     end
-    attr_writer :api_key
+
+    # Sets api key
+    # @param [String] api_key
+    def api_key=(api_key)
+      thread_store[:api_key] = api_key
+    end
 
     # @return [String, nil] A default currency.
     def default_currency
