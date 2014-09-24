@@ -12,7 +12,7 @@ Recurly is packaged as a Ruby gem. We recommend you install it with
 [Bundler](http://gembundler.com/) by adding the following line to your Gemfile:
 
 ``` ruby
-gem 'recurly', '~> 2.3.1'
+gem 'recurly', '~> 2.3.2'
 ```
 
 Recurly will automatically use [Nokogiri](http://nokogiri.org/) (for a nice
@@ -37,6 +37,9 @@ Recurly.api_key        = ENV['RECURLY_API_KEY']
 
 Configure the client library with
 [your API credentials](https://app.recurly.com/go/developer/api_access).
+
+`RECURLY_SUBDOMAIN` should contain subdomain for your recurly account
+`RECURLY_API_KEY` is your "Private API Key" which can be found under "API Credentials" on the `api_access` admin page
 
 The default currency is USD. To override with a different code:
 
