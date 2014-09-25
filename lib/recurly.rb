@@ -62,7 +62,7 @@ module Recurly
     # @return [String] An API key.
     # @raise [ConfigurationError] If not configured.
     def api_key
-      defined? thread_store[:api_key] and thread_store[:api_key] or raise(
+      thread_store.has_key?(:api_key) and thread_store[:api_key] or raise(
         ConfigurationError, "Recurly.api_key not configured"
       )
     end

@@ -11,13 +11,26 @@ describe Recurly do
     end
 
     it "must raise an exception when not set" do
-      Thread.current[:recurly] = nil
+      Recurly.thread_store.delete(:api_key)
       proc { Recurly.api_key }.must_raise ConfigurationError
     end
 
     it "must raise an exception when set to nil" do
       Recurly.api_key = nil
       proc { Recurly.api_key }.must_raise ConfigurationError
+    end
+
+    it "must be multi-assignable" do
+      Recurly.api_key ="new_api"
+      3.times do |i|
+        socket = Thread.new do
+          Recurly.api_key = "new_key_#{i}"
+          Recurly.api_key.must_equal "new_key_#{i}"
+        end
+        socket.join
+      end
+      Recurly.api_key.must_equal 'new_api'
+
     end
   end
 end
