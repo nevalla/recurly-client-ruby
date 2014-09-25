@@ -22,13 +22,16 @@ describe Recurly do
 
     it "must be multi-assignable" do
       Recurly.api_key ="new_api"
+      threads = []
       3.times do |i|
-        socket = Thread.new do
+        threads <<  Thread.new do
           Recurly.api_key = "new_key_#{i}"
+          timeout = ((1..10).to_a.sample.to_f) / 10
+          sleep(timeout)
           Recurly.api_key.must_equal "new_key_#{i}"
         end
-        socket.join
       end
+      threads.map(&:join)
       Recurly.api_key.must_equal 'new_api'
 
     end
