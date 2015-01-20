@@ -38,13 +38,22 @@ module Recurly
       tax_exempt
       entity_use_code
       created_at
+      vat_location_valid
     )
     alias to_param account_code
 
     # @return [Invoice] A newly-created invoice.
     # @raise [Invalid] Raised if the account cannot be invoiced.
-    def invoice!
-      Invoice.from_response API.post(invoices.uri)
+    def invoice!(attrs={})
+      Invoice.from_response API.post(invoices.uri, attrs.empty? ? nil : Invoice.to_xml(attrs))
+    rescue Recurly::API::UnprocessableEntity => e
+      raise Invalid, e.message
+    end
+
+    # @return [Invoice] The newly-built invoice that has not been persisted.
+    # @raise [Invalid] Raised if the account cannot be invoiced.
+    def build_invoice
+      Invoice.from_response API.post("#{invoices.uri}/preview")
     rescue Recurly::API::UnprocessableEntity => e
       raise Invalid, e.message
     end

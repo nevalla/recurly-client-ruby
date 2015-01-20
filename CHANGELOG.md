@@ -1,7 +1,47 @@
 <a name="unreleased"></a>
 ## Unreleased
+* Add `vat_location_valid` to `Account` [PR](https://github.com/recurly/recurly-client-ruby/pull/171)
+* Add `Invoice#invoice_number_prefix` and `Invoice#invoice_number_with_prefix` to make use of the new
+  Country Invoice Sequencing feature [PR](https://github.com/recurly/recurly-client-ruby/pull/173)
 
-* Pending
+<a name="v2.4.0"></a>
+## v2.4.0 (2015-1-7)
+* Add `Invoice#original_invoice` for refund invoices [PR](https://github.com/recurly/recurly-client-ruby/pull/169)
+
+<a name="v2.3.8"></a>
+## v2.3.8 (2014-12-22)
+
+* Add `Invoice#tax_region` and `Subscription#tax_region` [PR](https://github.com/recurly/recurly-client-ruby/pull/163)
+* Add `Invoice#address` and `Subscription#address` when previewing [PR](https://github.com/recurly/recurly-client-ruby/pull/165)
+* Add `Subscription#update_notes` to update a subscription's notes [PR](https://github.com/recurly/recurly-client-ruby/pull/165)
+* Add `AddOn#accounting_code` [PR](https://github.com/recurly/recurly-client-ruby/pull/164)
+
+<a name="v2.3.7"></a>
+## v2.3.7 (2014-12-8)
+
+* Add 'public_key' property to Recurly.js [1ad6aa0](https://github.com/recurly/recurly-client-ruby/pull/155)
+* Adds support for reading and writing custom invoice notes [PR](https://github.com/recurly/recurly-client-ruby/pull/158)
+* Add `Plan#tax_code`, `AddOn#tax_code` and `Adjustment#tax_code` [PR](https://github.com/recurly/recurly-client-ruby/pull/160)
+
+<a name="v2.3.6"></a>
+## v2.3.6 (2014-11-4)
+
+* Fixes issue with broken association lookups [ca0b015](https://github.com/recurly/recurly-client-ruby/commit/ca0b015fead172bdd01dce0a0878a8949c5ccac4)
+
+<a name="v2.3.5"></a>
+## v2.3.5 (2014-10-30)
+
+* Adding invoice refunds by line item: `invoice.refund(line_items)` [9acc7a5](https://github.com/recurly/recurly-client-ruby/commit/9acc7a54a5f9cfd8393800abea9f8b8455203fbc)
+
+<a name="v2.3.4"></a>
+## v2.3.4 (2014-10-3)
+
+* Adding invoice preview: `account.build_invoice` [0bc0d01](https://github.com/recurly/recurly-client-ruby/pull/153)
+
+<a name="v2.3.3"></a>
+## v2.3.3 (2014-9-29)
+
+* Adding the bulk parameter to the `Subscription#postpone` method [8bf72bc](https://github.com/recurly/recurly-client-ruby/pull/150)
 
 <a name="v2.3.2"></a>
 ## v2.3.2 (2014-9-9)

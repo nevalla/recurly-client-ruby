@@ -49,8 +49,13 @@ module Recurly
       po_number
       tax_in_cents
       tax_type
+      tax_region
       tax_rate
       bulk
+      terms_and_conditions
+      customer_notes
+      vat_reverse_charge_notes
+      address
     )
     alias to_param uuid
 
@@ -165,11 +170,23 @@ module Recurly
     # @return [true, false] +true+ when successful, +false+ when unable to
     #   (e.g., the subscription is not active).
     # @param next_renewal_date [Time] when the subscription should renew.
-    def postpone next_renewal_date
+    # @param bulk [boolean] set to true for bulk updates (bypassing 60 second wait).
+    def postpone next_renewal_date, bulk=false
       return false unless link? :postpone
       reload follow_link(:postpone,
-        :params => { :next_renewal_date => next_renewal_date }
+        :params => { :next_renewal_date => next_renewal_date, :bulk => bulk }
       )
+      true
+    end
+
+    # Update the notes sections of the subscription
+    #
+    # @return [true, false] +true+ when successful, +false+ when unable to
+    # @params notes [Hash] should be the notes parameters you wish to update
+    def update_notes(notes)
+      return false unless link? :notes
+      self.attributes = notes
+      reload follow_link(:notes, body: to_xml)
       true
     end
 

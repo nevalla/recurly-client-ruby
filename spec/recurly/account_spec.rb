@@ -7,12 +7,51 @@ describe Account do
       Account.find 'abcdef1234567890'
     }
 
+    describe '#build_invoice' do
+      it 'previews the accounts next invoice if successful' do
+        stub_api_request(
+          :post, 'accounts/abcdef1234567890/invoices/preview', 'invoices/preview-200'
+        )
+        account.build_invoice.must_be_instance_of Invoice
+      end
+
+      it 'derives and parses the account from the invoice preview' do
+        stub_api_request(
+          :post, 'accounts/abcdef1234567890/invoices/preview', 'invoices/preview-200'
+        )
+        account.build_invoice.address.must_be_instance_of Address
+        account.build_invoice.address.country.must_equal 'US'
+      end
+
+      it 'raises an exception if unsuccessful' do
+        stub_api_request(
+          :post, 'accounts/abcdef1234567890/invoices/preview', 'invoices/create-422'
+        )
+        error = proc { account.build_invoice }.must_raise Resource::Invalid
+        error.message.must_equal 'No charges to invoice'
+      end
+    end
+
     describe "#invoice!" do
       it "must invoice an account if successful" do
         stub_api_request(
           :post, 'accounts/abcdef1234567890/invoices', 'invoices/create-201'
         )
         account.invoice!.must_be_instance_of Invoice
+      end
+
+      it "must add optional attributes to the invoice if given" do
+        stub_api_request(
+          :post, 'accounts/abcdef1234567890/invoices', 'invoices/create-with-optionals-201'
+        )
+        invoice = account.invoice!({
+          terms_and_conditions: 'Some Terms and Conditions',
+          customer_notes: 'Some Customer Notes'
+        })
+
+        invoice.must_be_instance_of Invoice
+        invoice.customer_notes.must_equal 'Some Customer Notes'
+        invoice.terms_and_conditions.must_equal 'Some Terms and Conditions'
       end
 
       it "must raise an exception if unsuccessful" do
@@ -44,6 +83,7 @@ describe Account do
       account.address.zip.must_equal '94105'
       account.address.phone.must_equal '8015551234'
       account.address.country.must_equal 'US'
+      account.vat_location_valid.must_equal true
     end
 
     it 'must return an account with tax state' do
@@ -146,6 +186,29 @@ XML
       account.to_xml.must_equal(
         '<account><username>importantbreakfast</username></account>'
       )
+    end
+  end
+
+  describe "associations" do
+    let(:account) {
+      stub_api_request :get, 'accounts/abcdef1234567890', 'accounts/show-200'
+      stub_api_request :get, 'accounts/abcdef1234567890/subscriptions', 'accounts/subscriptions/index-200'
+      Account.find 'abcdef1234567890'
+    }
+
+    it "retrieves associations" do
+      account.subscriptions.first.must_be_instance_of Subscription
+    end
+
+    describe "when an account_code contains spaces" do
+      let(:account) {
+        stub_api_request :get, 'accounts/my%20account', 'accounts/show-200-space'
+        stub_api_request :get, 'accounts/my%20account/subscriptions', 'accounts/subscriptions/index-200-space'
+        Account.find 'my account'
+      }
+      it "retrieves associations" do
+        account.subscriptions.first.must_be_instance_of Subscription
+      end
     end
   end
 end

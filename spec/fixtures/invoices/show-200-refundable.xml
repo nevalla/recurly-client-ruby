@@ -2,32 +2,32 @@ HTTP/1.1 200 OK
 Content-Type: application/xml; charset=utf-8
 
 <?xml version="1.0" encoding="UTF-8"?>
-<invoice href="https://api.recurly.com/v2/invoices/created-invoice">
+<invoice href="https://api.recurly.com/v2/invoices/refundable-invoice">
   <account href="https://api.recurly.com/v2/accounts/abcdef1234567890"/>
-  <uuid>created-invoice</uuid>
+  <uuid>refundable-invoice</uuid>
   <state>open</state>
   <invoice_number type="integer">1000</invoice_number>
   <invoice_number_prefix></invoice_number_prefix>
   <po_number nil="nil"></po_number>
   <vat_number nil="nil"></vat_number>
-  <subtotal_in_cents type="integer">300</subtotal_in_cents>
-  <tax_in_cents type="integer">100</tax_in_cents>
-  <total_in_cents type="integer">300</total_in_cents>
+  <subtotal_in_cents type="integer">1100</subtotal_in_cents>
+  <tax_in_cents type="integer">0</tax_in_cents>
+  <total_in_cents type="integer">1100</total_in_cents>
   <currency>USD</currency>
   <created_at type="datetime">2011-04-30T08:00:00Z</created_at>
   <line_items>
-    <adjustment href="https://api.recurly.com/v2/adjustments/charge" type="charge">
+    <adjustment href="https://api.recurly.com/v2/adjustments/charge1" type="charge">
       <account href="https://api.recurly.com/v2/accounts/abcdef1234567890"/>
-      <invoice href="https://api.recurly.com/v2/invoices/created-invoice"/>
-      <uuid>charge</uuid>
+      <invoice href="https://api.recurly.com/v2/invoices/refundable-invoice"/>
+      <uuid>charge1</uuid>
       <state>invoiced</state>
-      <description>Special charge</description>
+      <description>Special charge 1</description>
       <origin>one_time</origin>
-      <unit_amount_in_cents type="integer">300</unit_amount_in_cents>
-      <quantity type="integer">1</quantity>
+      <unit_amount_in_cents type="integer">275</unit_amount_in_cents>
+      <quantity type="integer">2</quantity>
       <discount_in_cents type="integer">0</discount_in_cents>
-      <tax_in_cents type="integer">100</tax_in_cents>
-      <total_in_cents type="integer">300</total_in_cents>
+      <tax_in_cents type="integer">0</tax_in_cents>
+      <total_in_cents type="integer">550</total_in_cents>
       <currency>USD</currency>
       <taxable type="boolean">false</taxable>
       <start_date nil="nil"></start_date>
@@ -38,10 +38,10 @@ Content-Type: application/xml; charset=utf-8
   <transactions>
     <transaction href="https://api.recurly.com/v2/transactions/transaction" type="credit_card">
       <account href="https://api.recurly.com/v2/accounts/abcdef1234567890"/>
-      <invoice href="https://api.recurly.com/v2/invoices/created-invoice"/>
+      <invoice href="https://api.recurly.com/v2/invoices/refundable-invoice"/>
       <uuid>transaction</uuid>
       <action>purchase</action>
-      <amount_in_cents type="integer">300</amount_in_cents>
+      <amount_in_cents type="integer">1100</amount_in_cents>
       <tax_in_cents type="integer">0</tax_in_cents>
       <currency>USD</currency>
       <status>success</status>
@@ -84,4 +84,5 @@ Content-Type: application/xml; charset=utf-8
       <a name="refund" href="https://api.recurly.com/v2/transactions/transaction" method="delete"/>
     </transaction>
   </transactions>
+  <a name="refund" href="https://api.recurly.com/v2/invoices/refundable-invoice/refund" method="post"/>
 </invoice>
